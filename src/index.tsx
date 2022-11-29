@@ -1,5 +1,5 @@
 import React from 'react';
-// import './assets/sass/_main.scss';
+import './assets/sass/_main.scss';
 
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
