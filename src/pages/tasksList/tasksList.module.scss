@@ -1,0 +1,53 @@
+.container {
+  background-color: #facbff;
+  max-width: 160rem;
+  margin: 0 auto 6rem auto;
+  font-size: 1.5rem;
+  min-height: 50rem; // delete
+  padding: 2rem;
+}
+
+.returnToBoards {
+  background-color: #9c9be7;
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+.flexContainer {
+  display: flex;
+}
+
+.column {
+  background-color: #c9f8a4;
+
+  flex: 1;
+  & > h3{
+    padding: 1rem;
+  }
+}
+
+.task {
+  padding: 2rem;
+
+  & > div:not(:last-child) {
+    margin-bottom: 1.5rem;
+  }
+
+}
+
+.heading {
+  display: flex;
+  .taskNumber {
+    margin-right: 2rem;
+  }
+}
+
+.date {
+  display: flex;
+}
+
+.statuses {
+  display: flex;
+  justify-content: space-between;
+}
+
