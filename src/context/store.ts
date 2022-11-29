@@ -1,12 +1,11 @@
-import {
-  applyMiddleware,
-  combineReducers,
-  legacy_createStore as createStore,
-} from 'redux';
-import thunk from 'redux-thunk';
+import { combineReducers, legacy_createStore as createStore } from 'redux';
+
+import { BoardsReducer } from './boardsReducer/boardsReducer';
 
 export type RootStateType = ReturnType<typeof rootReducer>;
 
-export const rootReducer = combineReducers({});
+export const rootReducer = combineReducers({
+  boards: BoardsReducer,
+});
 
-export const store = createStore(rootReducer, applyMiddleware(thunk));
+export const store = createStore(rootReducer);

@@ -1,5 +1,15 @@
 import React from 'react';
 
+import { Route, Routes } from 'react-router-dom';
+
+import { BoardsList } from '../pages/boardsList/BoardsList';
+import { TasksList } from '../pages/tasksList/TasksList';
+
 export const App = () => {
-  return <div />;
+  return (
+    <Routes>
+      <Route path="/" element={<BoardsList />} />
+      <Route path="/tasks" element={<TasksList />} />
+    </Routes>
+  );
 };
