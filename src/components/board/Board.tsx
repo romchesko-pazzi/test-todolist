@@ -9,7 +9,11 @@ export const Board: React.FC<PropsType> = props => {
   const navigate = useNavigate();
 
   const navigateToTasksPage = () => {
-    navigate('/tasks');
+    navigate('/tasksList', {
+      state: {
+        boardId,
+      },
+    });
   };
 
   return (

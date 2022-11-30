@@ -29,8 +29,8 @@ export const setBoards = (boards: BoardType[]) => {
   } as const;
 };
 
-type CreateBoardType = ReturnType<typeof createBoard>;
-type SetBoardsType = ReturnType<typeof setBoards>;
+export type CreateBoardType = ReturnType<typeof createBoard>;
+export type SetBoardsType = ReturnType<typeof setBoards>;
 
 export type BoardsActionsType = CreateBoardType | SetBoardsType;
 

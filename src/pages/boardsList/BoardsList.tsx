@@ -17,10 +17,10 @@ export const BoardsList = () => {
   const boards = useAppSelector(state => state.boards);
 
   useEffect(() => {
-    const boardsAsString = localStorage.getItem('boards');
+    const boardsFromLS = localStorage.getItem('boards');
 
-    if (boardsAsString) {
-      const parsedBoards = JSON.parse(boardsAsString);
+    if (boardsFromLS) {
+      const parsedBoards = JSON.parse(boardsFromLS);
 
       if (boards.length < 1) dispatch(setBoards(parsedBoards));
     }

@@ -15,19 +15,26 @@
 
 .flexContainer {
   display: flex;
+
+  & > div:not(:last-child) {
+    margin-right: 1.5rem;
+  }
+
 }
 
 .column {
   background-color: #c9f8a4;
 
   flex: 1;
-  & > h3{
+
+  & > h3 {
     padding: 1rem;
   }
 }
 
-.task {
+.tasks {
   padding: 2rem;
+  background-color: #f5b09a;
 
   & > div:not(:last-child) {
     margin-bottom: 1.5rem;
@@ -37,6 +44,7 @@
 
 .heading {
   display: flex;
+
   .taskNumber {
     margin-right: 2rem;
   }
