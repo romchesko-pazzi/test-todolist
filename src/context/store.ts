@@ -1,12 +1,12 @@
 import { combineReducers, legacy_createStore as createStore } from 'redux';
 
-import { BoardsReducer } from './boardsReducer/boardsReducer';
 import { TasksReducer } from './tasksReducer/TasksReducer';
+import { TodolistReducer } from './todolistReducer.ts/TodolistReducer';
 
 export type RootStateType = ReturnType<typeof rootReducer>;
 
 export const rootReducer = combineReducers({
-  boards: BoardsReducer,
+  todolists: TodolistReducer,
   tasks: TasksReducer,
 });
 

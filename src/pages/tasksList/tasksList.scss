@@ -1,0 +1,28 @@
+.item {
+  margin: 0 2rem;
+  display: flex;
+  background-color: #9c9be7;
+
+  & > div:not(:last-child) {
+    margin-right: 1.5rem;
+  }
+
+  padding: .7rem 1.4rem;
+  border-radius: 1rem;
+  cursor: pointer;
+}
+
+.board {
+  background-color: #c9f8a4;
+  min-height: 50rem;
+  flex: 1;
+
+  & > h3 {
+    padding: 0 2rem;
+    margin: 1.5rem 0;
+  }
+
+  & > div:not(:last-child) {
+    margin-bottom: 2rem;
+  }
+}

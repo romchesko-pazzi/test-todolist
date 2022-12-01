@@ -16,10 +16,10 @@ export const Task: React.FC<TaskPropsType> = props => {
   } = props;
 
   return (
-    <div className={s.main}>
+    <>
       <div className={s.taskNumber}>{taskNumber}.</div>
       <div className={s.taskTitle}>{taskTitle}</div>
-    </div>
+    </>
   );
 };
 

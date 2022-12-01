@@ -1,5 +1,8 @@
 import { TaskPropsType } from '../../components/task/Task';
-import { CreateBoardType, SetBoardsType } from '../boardsReducer/boardsReducer';
+import {
+  CreateTodolistType,
+  SetTodolistsType,
+} from '../todolistReducer.ts/TodolistReducer';
 
 const initState: TasksGeneralType = {};
 
@@ -8,35 +11,27 @@ export const TasksReducer = (
   action: TasksActionsType,
 ): TasksGeneralType => {
   switch (action.type) {
-    case 'boards/create-board':
-      return { ...state, [action.payload.board.boardId]: [] };
+    case 'todolist/create-todolist':
+      return { ...state, [action.payload.todolist.todolistId]: [] };
     case 'tasks/create-task':
       return {
         ...state,
-        [action.payload.task.boardId]: [
+        [action.payload.task.todolistId]: [
           action.payload.task,
-          ...state[action.payload.task.boardId],
+          ...state[action.payload.task.todolistId],
         ],
       };
-    case 'boards/set-boards': {
+    case 'todolist/set-todolists': {
       const copy = { ...state };
 
-      action.payload.boards.forEach(board => {
-        copy[board.boardId] = [];
+      action.payload.todolists.forEach(todolist => {
+        copy[todolist.todolistId] = [];
       });
 
       return copy;
     }
     case 'tasks/set-tasks':
-      //   const copy = { ...state };
-      //
-      //   action.payload.tasks.forEach(task => {
-      //     copy[task.boardId] = [...action.payload.tasks];
-      //   });
-      //
-      //   return copy;
-      // }
-      return { ...state, [action.payload.boardId]: action.payload.tasks };
+      return { ...state, [action.payload.todolistId]: action.payload.tasks };
     default: {
       return state;
     }
@@ -50,10 +45,10 @@ export const createTask = (task: TaskType) => {
   } as const;
 };
 
-export const setTasks = (boardId: string, tasks: TaskType[]) => {
+export const setTasks = (todolistId: string, tasks: TaskType[]) => {
   return {
     type: 'tasks/set-tasks',
-    payload: { boardId, tasks },
+    payload: { todolistId, tasks },
   } as const;
 };
 
@@ -61,8 +56,8 @@ type CreateTaskType = ReturnType<typeof createTask>;
 type SetTasksType = ReturnType<typeof setTasks>;
 
 export type TasksActionsType =
-  | CreateBoardType
-  | SetBoardsType
+  | CreateTodolistType
+  | SetTodolistsType
   | CreateTaskType
   | SetTasksType;
 
@@ -70,8 +65,18 @@ type TasksGeneralType = {
   [key: string]: TaskType[];
 };
 
+// type TasksGeneralType = {
+//   [key: string]: TaskTestType[];
+// };
+
+// export type TaskTestType = {
+//   id: string;
+//   filter: 'queue' | 'development' | 'done';
+//   tasks: TaskType[];
+// };
+
 export type TaskType = TaskPropsType & {
-  boardId: string;
+  todolistId: string;
 };
 // 'low' | 'medium' | 'high'
 // 'queue' | 'development' | 'done'

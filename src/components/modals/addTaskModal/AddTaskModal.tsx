@@ -3,12 +3,13 @@ import React, { ChangeEvent, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { createTask } from '../../../context/tasksReducer/TasksReducer';
-import s from '../../../pages/tasksList/tasksList.module.scss';
 import { guid } from '../../../utils/functions/generateRandomId/guid';
 import { BaseModal } from '../baseModal/BaseModal';
 
+import s from './addTaskModal.module.scss';
+
 export const AddTaskModal: React.FC<PropsType> = props => {
-  const { switchModal, modalActive, boardId } = props;
+  const { switchModal, modalActive, todolistId } = props;
 
   const [taskTitle, setTaskTitle] = useState('');
   const [taskNumber, setTaskNumber] = useState('');
@@ -40,17 +41,17 @@ export const AddTaskModal: React.FC<PropsType> = props => {
   const endDateHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setEndDate(e.currentTarget.value);
   };
-  const setPriorityHandler = (e: ChangeEvent<HTMLInputElement>) => {
+  const setPriorityHandler = (e: ChangeEvent<HTMLSelectElement>) => {
     setPriority(e.currentTarget.value);
   };
-  const setStatusHandler = (e: ChangeEvent<HTMLInputElement>) => {
+  const setStatusHandler = (e: ChangeEvent<HTMLSelectElement>) => {
     setStatus(e.currentTarget.value);
   };
 
   const createNewTaskHandler = () => {
     dispatch(
       createTask({
-        boardId,
+        todolistId,
         taskTitle,
         taskNumber,
         description,
@@ -65,44 +66,74 @@ export const AddTaskModal: React.FC<PropsType> = props => {
     switchModal(false);
     setTaskTitle('');
   };
+  const fields = [
+    {
+      label: 'Enter task name:',
+      type: 'text',
+      value: taskTitle,
+      callback: taskTitleHandler,
+    },
+    {
+      label: 'Task number:',
+      type: 'text',
+      value: taskNumber,
+      callback: taskNumberHandler,
+    },
+    {
+      label: 'Description:',
+      type: 'text',
+      value: description,
+      callback: descriptionHandler,
+    },
+    {
+      label: 'Date created:',
+      type: 'date',
+      value: creationDate,
+      callback: dateCreatedHandler,
+    },
+    {
+      label: 'Elapsed time:',
+      type: 'date',
+      value: elapsedTime,
+      callback: elapsedTimeHandler,
+    },
+    {
+      label: 'End date:',
+      type: 'date',
+      value: endDate,
+      callback: endDateHandler,
+    },
+  ];
 
   return (
     <BaseModal active={modalActive} setActive={switchModal}>
-      <div className={s.taskTitle}>
-        Enter task name
-        <input value={taskTitle} onChange={taskTitleHandler} />
-      </div>
-      <div>
-        Task number:
-        <input value={taskNumber} onChange={taskNumberHandler} />
-      </div>
-      <div>
-        Description:
-        <input value={description} onChange={descriptionHandler} />
-      </div>
-      <div>
-        Date created:
-        <input type="date" value={creationDate} onChange={dateCreatedHandler} />
-      </div>
-      <div>
-        Elapsed time:
-        <input type="date" value={elapsedTime} onChange={elapsedTimeHandler} />
-      </div>
-      <div>
-        End date:
-        <input type="date" value={endDate} onChange={endDateHandler} />
-      </div>
-      <div>
-        Priority:
-        <input value={priority} onChange={setPriorityHandler} />
-      </div>
-      <div>
-        Status:
-        <input value={status} onChange={setStatusHandler} />
-      </div>
-      <div>
-        Attach files:
-        <input type="file" />
+      <div className={s.main}>
+        {fields.map(field => (
+          <div key={field.label}>
+            {field.label}
+            <input type={field.type} onChange={field.callback} />
+          </div>
+        ))}
+        <div>
+          Priority:
+          <select value={priority} onChange={setPriorityHandler}>
+            <option value="low">low</option>
+            <option value="medium">medium</option>
+            <option value="high">high</option>
+          </select>
+        </div>
+        <div>
+          Status:
+          <select value={status} onChange={setStatusHandler}>
+            <option value="queue">queue</option>
+            <option value="development">development</option>
+            <option value="done">done</option>
+          </select>
+        </div>
+        <div>
+          Attach files:
+          <input type="file" />
+        </div>
       </div>
       <button type="button" onClick={createNewTaskHandler}>
         create
@@ -112,7 +143,7 @@ export const AddTaskModal: React.FC<PropsType> = props => {
 };
 
 type PropsType = {
-  boardId: string;
+  todolistId: string;
   switchModal: (modalActive: boolean) => void;
   modalActive: boolean;
 };

@@ -1,0 +1,10 @@
+.main {
+  & > div:not(:last-child) {
+    margin-bottom: 1rem;
+  }
+
+  & input, select {
+    margin-left: 1.5rem;
+  }
+
+}

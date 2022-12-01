@@ -132,7 +132,7 @@
         "no-unused-vars": "off",
         "no-use-before-define": "off",
         "no-param-reassign": [
-            "error",
+            "warn",
             {
                 "props": true,
                 "ignorePropertyModificationsFor": [

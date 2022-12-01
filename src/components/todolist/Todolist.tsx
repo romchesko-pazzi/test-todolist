@@ -2,23 +2,23 @@ import React from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-import s from './board.module.scss';
+import s from './todolist.module.scss';
 
-export const Board: React.FC<PropsType> = props => {
-  const { boardId, title } = props;
+export const Todolist: React.FC<PropsType> = props => {
+  const { todolistId, title } = props;
   const navigate = useNavigate();
 
   const navigateToTasksPage = () => {
     navigate('/tasksList', {
       state: {
-        boardId,
+        todolistId,
       },
     });
   };
 
   return (
     <div className={s.box}>
-      <div className={s.board} onClick={navigateToTasksPage}>
+      <div className={s.todolist} onClick={navigateToTasksPage}>
         <h3>{title}</h3>
       </div>
     </div>
@@ -27,5 +27,5 @@ export const Board: React.FC<PropsType> = props => {
 
 type PropsType = {
   title: string;
-  boardId: string;
+  todolistId: string;
 };
