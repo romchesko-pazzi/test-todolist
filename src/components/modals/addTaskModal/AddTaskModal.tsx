@@ -17,8 +17,8 @@ export const AddTaskModal: React.FC<PropsType> = props => {
   const [creationDate, setCreationDate] = useState('');
   const [elapsedTime, setElapsedTime] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [priority, setPriority] = useState('');
-  const [status, setStatus] = useState('');
+  const [priority, setPriority] = useState('medium');
+  const [status, setStatus] = useState('queue');
 
   const dispatch = useDispatch();
 
@@ -111,7 +111,7 @@ export const AddTaskModal: React.FC<PropsType> = props => {
         {fields.map(field => (
           <div key={field.label}>
             {field.label}
-            <input type={field.type} onChange={field.callback} />
+            <input value={field.value} type={field.type} onChange={field.callback} />
           </div>
         ))}
         <div>
