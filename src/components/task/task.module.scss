@@ -1,0 +1,22 @@
+.task {
+  display: flex;
+}
+
+.taskTitle {
+  display: flex;
+
+  & > div:not(:last-child) {
+    margin-right: 1.5rem;
+  }
+}
+
+.modalContent {
+  & > div:not(:last-child), h3 {
+    margin-bottom: 2rem;
+  }
+
+  & > div {
+    padding: 1rem;
+    background-color: #e5e5e5;
+  }
+}
