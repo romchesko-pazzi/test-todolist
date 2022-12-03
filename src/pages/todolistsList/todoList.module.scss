@@ -1,20 +1,19 @@
 .container {
-  background-color: #facbff;
+  background-color: #ffffff;
+  box-shadow: 0 4px 1rem 0 rgba(0, 0, 0, 0.23);
+  border-radius: 1rem;
   max-width: 160rem;
-  margin: 6rem auto;
+  margin: 10rem auto;
   font-size: 1.5rem;
   min-height: 50rem; // delete
 }
 
 .addTodolist {
   background-color: #30c4c0;
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
   display: flex;
   justify-content: end;
   align-items: center;
-  min-height: 4rem;
-
-  & > button {
-    //margin-top: 2rem;
-  }
-
+  padding: 1rem;
 }

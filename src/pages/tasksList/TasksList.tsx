@@ -113,7 +113,7 @@ export const TasksList = () => {
           <span>Back to boards list</span>
         </Link>
         <button type="button" onClick={openModal}>
-          new
+          add new task
         </button>
       </div>
       <div className={s.flexContainer}>

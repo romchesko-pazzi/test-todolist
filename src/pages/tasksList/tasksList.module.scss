@@ -1,16 +1,31 @@
 .container {
-  background-color: #facbff;
+  box-shadow: 0 4px 31px 0 rgba(0, 0, 0, 0.23);
+  background-color: white;
+  border-radius: 1rem;
   max-width: 160rem;
-  margin: 0 auto 6rem auto;
+  margin: 10rem auto;
   font-size: 1.5rem;
   min-height: 50rem; // delete
   padding: 2rem;
 }
 
+.headContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+
+  & > button {
+    padding: 1rem;
+    border-radius: 1rem;
+  }
+
+}
+
 .returnToTodolists {
   background-color: #9c9be7;
-  display: inline-block;
-  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 1rem;
 }
 
 .flexContainer {
@@ -20,21 +35,6 @@
     margin-right: 1.5rem;
   }
 
-}
-
-.column {
-  background-color: #c9f8a4;
-  min-height: 50rem;
-  flex: 1;
-
-  & > h3 {
-    padding: 0 2rem;
-    margin: 1.5rem 0;
-  }
-
-  & > div:not(:last-child) {
-    margin-bottom: 2rem;
-  }
 }
 
 .heading {
