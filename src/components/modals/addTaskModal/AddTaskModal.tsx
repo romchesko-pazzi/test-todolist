@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 
 import { createTask } from '../../../context/tasksReducer/TasksReducer';
 import { guid } from '../../../utils/functions/generateRandomId/guid';
+import { getDate } from '../../../utils/functions/getDate/getDate';
 import { BaseModal } from '../baseModal/BaseModal';
 
 import s from './addTaskModal.module.scss';
@@ -14,8 +15,7 @@ export const AddTaskModal: React.FC<PropsType> = props => {
   const [taskTitle, setTaskTitle] = useState('');
   const [taskNumber, setTaskNumber] = useState('');
   const [description, setDescription] = useState('');
-  const [creationDate, setCreationDate] = useState('');
-  const [elapsedTime, setElapsedTime] = useState('');
+  const [timeSpent, setElapsedTime] = useState('');
   const [endDate, setEndDate] = useState('');
   const [priority, setPriority] = useState('medium');
   const [status, setStatus] = useState('queue');
@@ -32,9 +32,6 @@ export const AddTaskModal: React.FC<PropsType> = props => {
   const descriptionHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setDescription(e.currentTarget.value);
   };
-  const dateCreatedHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setCreationDate(e.currentTarget.value);
-  };
   const elapsedTimeHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setElapsedTime(e.currentTarget.value);
   };
@@ -49,6 +46,8 @@ export const AddTaskModal: React.FC<PropsType> = props => {
   };
 
   const createNewTaskHandler = () => {
+    const creationDate = getDate();
+
     dispatch(
       createTask({
         todolistId,
@@ -56,7 +55,7 @@ export const AddTaskModal: React.FC<PropsType> = props => {
         taskNumber,
         description,
         creationDate,
-        elapsedTime,
+        timeSpent,
         endDate,
         priority,
         status,
@@ -66,6 +65,7 @@ export const AddTaskModal: React.FC<PropsType> = props => {
     switchModal(false);
     setTaskTitle('');
   };
+
   const fields = [
     {
       label: 'Enter task name:',
@@ -86,15 +86,9 @@ export const AddTaskModal: React.FC<PropsType> = props => {
       callback: descriptionHandler,
     },
     {
-      label: 'Date created:',
-      type: 'date',
-      value: creationDate,
-      callback: dateCreatedHandler,
-    },
-    {
-      label: 'Elapsed time:',
-      type: 'date',
-      value: elapsedTime,
+      label: 'Time spent: (hours)',
+      type: 'text',
+      value: timeSpent,
       callback: elapsedTimeHandler,
     },
     {
