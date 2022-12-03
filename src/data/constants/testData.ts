@@ -1,6 +1,6 @@
-import { LocalBoardType } from '../../pages/tasksList/TasksList';
+import { BoardType, TaskType } from '../../context/tasksReducer/TasksReducer';
 
-export const currentTaskInit = {
+export const currentTaskInit: TaskType = {
   taskId: 'taskId1',
   taskNumber: '1',
   taskTitle: 'Node.js',
@@ -13,8 +13,8 @@ export const currentTaskInit = {
   status: 'queue',
 };
 
-export const currentBoardInit: LocalBoardType = {
-  id: 1,
-  title: 'queue',
-  items: [currentTaskInit],
+export const currentBoardInit: BoardType = {
+  boardId: 1,
+  filter: 'queue',
+  tasks: [currentTaskInit],
 };

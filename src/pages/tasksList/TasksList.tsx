@@ -5,8 +5,12 @@ import { Link, useLocation } from 'react-router-dom';
 
 import { AddTaskModal } from '../../components/modals/addTaskModal/AddTaskModal';
 import { Task } from '../../components/task/Task';
-import { setTasks, TaskType } from '../../context/tasksReducer/TasksReducer';
-import { setTodolists } from '../../context/todolistReducer.ts/TodolistReducer';
+import {
+  BoardType,
+  changeTaskStatus,
+  setTasks,
+  TaskType,
+} from '../../context/tasksReducer/TasksReducer';
 import { currentBoardInit, currentTaskInit } from '../../data/constants/testData';
 import { useAppSelector } from '../../utils/hooks/typedUseSelector';
 
@@ -17,18 +21,22 @@ export const TasksList = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const { todolistId } = location.state as { todolistId: string };
-  const tasks = useAppSelector(state => state.tasks[todolistId]);
-  const todolists = useAppSelector(state => state.todolists);
+  const tasks = useAppSelector(state => state.tasks[todolistId]) || [];
 
-  useEffect(() => {
-    const todolistsFromLS = localStorage.getItem('todolists');
+  const queueTasks = tasks.filter(f => f.status === 'queue');
+  const devTasks = tasks.filter(f => f.status === 'development');
+  const doneTasks = tasks.filter(f => f.status === 'done');
 
-    if (todolistsFromLS) {
-      const parsedTodolists = JSON.parse(todolistsFromLS);
+  // local state
+  const [boards, setBoards] = useState<BoardType[]>([
+    { boardId: 1, filter: 'queue', tasks: queueTasks },
+    { boardId: 2, filter: 'development', tasks: devTasks },
+    { boardId: 3, filter: 'done', tasks: doneTasks },
+  ]);
+  const [startBoard, setStartBoard] = useState<BoardType>(currentBoardInit);
+  const [currentTask, setCurrentTask] = useState<TaskType>(currentTaskInit);
+  const [modalActive, setModalActive] = useState(false);
 
-      if (todolists.length < 1) dispatch(setTodolists(parsedTodolists));
-    }
-  }, []);
   useEffect(() => {
     const tasksFromLS = localStorage.getItem('tasks');
 
@@ -42,35 +50,18 @@ export const TasksList = () => {
   useEffect(() => {
     if (tasks.length > 0) localStorage.setItem('tasks', JSON.stringify(tasks));
     setBoards([
-      { id: 1, title: 'queue', items: queueTasks },
-      { id: 2, title: 'development', items: devTasks },
-      { id: 3, title: 'done', items: doneTasks },
+      { boardId: 1, filter: 'queue', tasks: queueTasks },
+      { boardId: 2, filter: 'development', tasks: devTasks },
+      { boardId: 3, filter: 'done', tasks: doneTasks },
     ]);
   }, [tasks]);
 
-  // filter tasks from store
-  const queueTasks = tasks.filter(f => f.status === 'queue');
-  const devTasks = tasks.filter(f => f.status === 'development');
-  const doneTasks = tasks.filter(f => f.status === 'done');
-
-  // local state
-  const [boards, setBoards] = useState<LocalBoardType[]>([
-    { id: 1, title: 'queue', items: queueTasks },
-    { id: 2, title: 'development', items: devTasks },
-    { id: 3, title: 'done', items: doneTasks },
-  ]);
-  const [startBoard, setStartBoard] = useState<LocalBoardType>(currentBoardInit);
-  const [currentTask, setCurrentTask] = useState<TaskType>(currentTaskInit);
-  const [modalActive, setModalActive] = useState(false);
-
   // handlers
-  // срабатывает в тот момент когда взяли задачу
-  const dragStartHandler = (e: any, sendingBoard: LocalBoardType, item: TaskType) => {
+  const dragStartHandler = (e: any, sendingBoard: BoardType, item: TaskType) => {
     setStartBoard(sendingBoard);
     setCurrentTask(item);
   };
 
-  // объект-приёмник. Срабатывает когда находимся над объектом-приёмником
   const dragOverHandler = (e: any) => {
     e.preventDefault();
     // подсвечиваем элемент под который перемещаем задачу
@@ -81,28 +72,29 @@ export const TasksList = () => {
     e.target.style.boxShadow = 'none';
   };
 
-  // срабатывает когда отпустили задачу
   const dragEndHandler = (e: any) => {
     e.target.style.boxShadow = 'none';
   };
 
-  const dropToReceivingBoard = (e: any, receivingBoard: LocalBoardType) => {
+  const dropToReceivingBoard = (e: any, receivingBoard: BoardType) => {
     // пушим в принимающую доску
-    receivingBoard.items.push(currentTask);
+    receivingBoard.tasks.push(currentTask);
 
     // получаем индекс задачи которую держим в руке
-    const currentIndex = startBoard.items.indexOf(currentTask);
+    const currentIndex = startBoard.tasks.indexOf(currentTask);
 
     // удаляем задачу которую держим в руке из старой доски
-    startBoard.items.splice(currentIndex, 1);
+    startBoard.tasks.splice(currentIndex, 1);
+
+    dispatch(changeTaskStatus(currentTask, receivingBoard.filter));
 
     // для ререндера, задачи запушили,удалили, теперь нужно засетать в local state
     setBoards(
       boards.map(b => {
-        if (b.id === receivingBoard.id) {
+        if (b.boardId === receivingBoard.boardId) {
           return receivingBoard;
         }
-        if (b.id === startBoard.id) {
+        if (b.boardId === startBoard.boardId) {
           return startBoard;
         }
 
@@ -129,11 +121,11 @@ export const TasksList = () => {
           <div
             onDragOver={e => dragOverHandler(e)}
             onDrop={e => dropToReceivingBoard(e, board)}
-            key={board.id}
+            key={board.boardId}
             className="board"
           >
-            <h3>{board.title}</h3>
-            {board.items.map(item => (
+            <h3>{board.filter}</h3>
+            {board.tasks.map(item => (
               <div
                 draggable
                 onDragOver={e => dragOverHandler(e)}
@@ -167,10 +159,4 @@ export const TasksList = () => {
       />
     </div>
   );
-};
-
-export type LocalBoardType = {
-  id: number;
-  title: 'queue' | 'development' | 'done';
-  items: TaskType[];
 };

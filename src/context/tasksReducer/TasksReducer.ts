@@ -1,4 +1,4 @@
-import { TaskPropsType } from '../../components/task/Task';
+import { StatusType, TaskPropsType } from '../../components/task/Task';
 import {
   CreateTodolistType,
   SetTodolistsType,
@@ -32,6 +32,15 @@ export const TasksReducer = (
     }
     case 'tasks/set-tasks':
       return { ...state, [action.payload.todolistId]: action.payload.tasks };
+    case 'tasks/change-status':
+      return {
+        ...state,
+        [action.payload.task.todolistId]: state[action.payload.task.todolistId].map(m =>
+          m.taskId === action.payload.task.taskId
+            ? { ...m, status: action.payload.newStatus }
+            : m,
+        ),
+      };
     default: {
       return state;
     }
@@ -52,31 +61,34 @@ export const setTasks = (todolistId: string, tasks: TaskType[]) => {
   } as const;
 };
 
+export const changeTaskStatus = (task: TaskType, newStatus: StatusType) => {
+  return {
+    type: 'tasks/change-status',
+    payload: { task, newStatus },
+  } as const;
+};
+
 type CreateTaskType = ReturnType<typeof createTask>;
 type SetTasksType = ReturnType<typeof setTasks>;
+type ChangeTaskStatusType = ReturnType<typeof changeTaskStatus>;
 
 export type TasksActionsType =
   | CreateTodolistType
   | SetTodolistsType
   | CreateTaskType
-  | SetTasksType;
+  | SetTasksType
+  | ChangeTaskStatusType;
 
 type TasksGeneralType = {
   [key: string]: TaskType[];
 };
 
-// type TasksGeneralType = {
-//   [key: string]: TaskTestType[];
-// };
-
-// export type TaskTestType = {
-//   id: string;
-//   filter: 'queue' | 'development' | 'done';
-//   tasks: TaskType[];
-// };
+export type BoardType = {
+  boardId: number;
+  filter: StatusType;
+  tasks: TaskType[];
+};
 
 export type TaskType = TaskPropsType & {
   todolistId: string;
 };
-// 'low' | 'medium' | 'high'
-// 'queue' | 'development' | 'done'

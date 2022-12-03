@@ -53,5 +53,7 @@ export type TaskPropsType = {
   timeSpent: string;
   endDate: string;
   priority: string;
-  status: string;
+  status: StatusType;
 };
+
+export type StatusType = 'queue' | 'development' | 'done';

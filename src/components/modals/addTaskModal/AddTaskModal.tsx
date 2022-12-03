@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { createTask } from '../../../context/tasksReducer/TasksReducer';
 import { guid } from '../../../utils/functions/generateRandomId/guid';
 import { getDate } from '../../../utils/functions/getDate/getDate';
+import { StatusType } from '../../task/Task';
 import { BaseModal } from '../baseModal/BaseModal';
 
 import s from './addTaskModal.module.scss';
@@ -18,7 +19,7 @@ export const AddTaskModal: React.FC<PropsType> = props => {
   const [timeSpent, setElapsedTime] = useState('');
   const [endDate, setEndDate] = useState('');
   const [priority, setPriority] = useState('medium');
-  const [status, setStatus] = useState('queue');
+  const [status, setStatus] = useState<StatusType>('queue');
 
   const dispatch = useDispatch();
 
@@ -42,7 +43,7 @@ export const AddTaskModal: React.FC<PropsType> = props => {
     setPriority(e.currentTarget.value);
   };
   const setStatusHandler = (e: ChangeEvent<HTMLSelectElement>) => {
-    setStatus(e.currentTarget.value);
+    setStatus(e.currentTarget.value as StatusType);
   };
 
   const createNewTaskHandler = () => {
