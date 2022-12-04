@@ -62,19 +62,7 @@ export const TasksList = () => {
     setCurrentTask(item);
   };
 
-  const dragOverHandler = (e: any) => {
-    e.preventDefault();
-    // подсвечиваем элемент под который перемещаем задачу
-    if (e.target.className === 'item') e.target.style.boxShadow = '0 4px 3px gray';
-  };
-
-  const dragLeaveHandler = (e: any) => {
-    e.target.style.boxShadow = 'none';
-  };
-
-  const dragEndHandler = (e: any) => {
-    e.target.style.boxShadow = 'none';
-  };
+  const dragOverHandler = (e: any) => e.preventDefault();
 
   const dropToReceivingBoard = (e: any, receivingBoard: BoardType) => {
     // пушим в принимающую доску
@@ -101,7 +89,6 @@ export const TasksList = () => {
         return b;
       }),
     );
-    e.target.style.boxShadow = 'none';
   };
 
   const openModal = () => setModalActive(true);
@@ -129,9 +116,7 @@ export const TasksList = () => {
               <div
                 draggable
                 onDragOver={e => dragOverHandler(e)}
-                onDragLeave={e => dragLeaveHandler(e)}
                 onDragStart={e => dragStartHandler(e, board, item)}
-                onDragEnd={e => dragEndHandler(e)}
                 key={item.taskId}
                 className="item"
               >
@@ -139,11 +124,10 @@ export const TasksList = () => {
                   key={item.taskId}
                   taskId={item.taskId}
                   taskTitle={item.taskTitle}
-                  taskNumber={item.taskNumber}
                   description={item.description}
                   creationDate={item.creationDate}
                   timeSpent={item.timeSpent}
-                  endDate={item.endDate}
+                  deadlineDate={item.deadlineDate}
                   priority={item.priority}
                   status={item.status}
                 />

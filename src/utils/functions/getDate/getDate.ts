@@ -10,3 +10,12 @@ export const getDate = () => {
 
   return `${currentMonth} ${currentDay}, ${currentYear} ${withPmAm}`;
 };
+
+export const getDeadlineDate = (initDate: string) => {
+  const date = new Date(initDate);
+  const month = date.toLocaleString('default', { month: 'long' });
+  const day = date.toLocaleString('default', { day: 'numeric' });
+  const year = date.getFullYear();
+
+  return `${month} ${day}, ${year}`;
+};

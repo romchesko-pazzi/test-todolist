@@ -4,8 +4,8 @@ import { useDispatch } from 'react-redux';
 
 import { createTask } from '../../../context/tasksReducer/TasksReducer';
 import { guid } from '../../../utils/functions/generateRandomId/guid';
-import { getDate } from '../../../utils/functions/getDate/getDate';
-import { StatusType } from '../../task/Task';
+import { getDate, getDeadlineDate } from '../../../utils/functions/getDate/getDate';
+import { PriorityType, StatusType } from '../../task/Task';
 import { BaseModal } from '../baseModal/BaseModal';
 
 import s from './addTaskModal.module.scss';
@@ -14,21 +14,16 @@ export const AddTaskModal: React.FC<PropsType> = props => {
   const { switchModal, modalActive, todolistId } = props;
 
   const [taskTitle, setTaskTitle] = useState('');
-  const [taskNumber, setTaskNumber] = useState('');
   const [description, setDescription] = useState('');
   const [timeSpent, setElapsedTime] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [priority, setPriority] = useState('medium');
+  const [priority, setPriority] = useState<PriorityType>('medium');
   const [status, setStatus] = useState<StatusType>('queue');
 
   const dispatch = useDispatch();
-
   // handlers
   const taskTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setTaskTitle(e.currentTarget.value);
-  };
-  const taskNumberHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setTaskNumber(e.currentTarget.value);
   };
   const descriptionHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setDescription(e.currentTarget.value);
@@ -40,7 +35,7 @@ export const AddTaskModal: React.FC<PropsType> = props => {
     setEndDate(e.currentTarget.value);
   };
   const setPriorityHandler = (e: ChangeEvent<HTMLSelectElement>) => {
-    setPriority(e.currentTarget.value);
+    setPriority(e.currentTarget.value as PriorityType);
   };
   const setStatusHandler = (e: ChangeEvent<HTMLSelectElement>) => {
     setStatus(e.currentTarget.value as StatusType);
@@ -48,16 +43,16 @@ export const AddTaskModal: React.FC<PropsType> = props => {
 
   const createNewTaskHandler = () => {
     const creationDate = getDate();
+    const deadlineDate = getDeadlineDate(endDate);
 
     dispatch(
       createTask({
         todolistId,
         taskTitle,
-        taskNumber,
         description,
         creationDate,
         timeSpent,
-        endDate,
+        deadlineDate,
         priority,
         status,
         taskId: guid(),
@@ -73,12 +68,6 @@ export const AddTaskModal: React.FC<PropsType> = props => {
       type: 'text',
       value: taskTitle,
       callback: taskTitleHandler,
-    },
-    {
-      label: 'Task number:',
-      type: 'text',
-      value: taskNumber,
-      callback: taskNumberHandler,
     },
     {
       label: 'Description:',
