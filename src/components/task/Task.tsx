@@ -1,5 +1,11 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 
+import { useDispatch } from 'react-redux';
+
+import {
+  updateTaskData,
+  UpdateTaskDataType,
+} from '../../context/tasksReducer/TasksReducer';
 import { BaseModal } from '../modals/baseModal/BaseModal';
 import { SvgSelector } from '../svgSelector/SvgSelector';
 
@@ -15,21 +21,47 @@ export const Task: React.FC<TaskPropsType> = props => {
     deadlineDate,
     priority,
     status,
+    todolistId,
+    setDraggable,
+    isDraggable,
   } = props;
+
+  const dispatch = useDispatch();
   const [modalActive, setModalActive] = useState(false);
   const [isInput, setIsInput] = useState(false);
   const [localTaskTitle, setLocalTaskTitle] = useState(taskTitle);
   const [localDescription, setLocalDescription] = useState(description);
   const [localTimeSpent, setLocalTimeSpent] = useState(timeSpent);
-  const [localDeadlineDate, setLocalDeadlineDate] = useState(deadlineDate);
   const [localPriority, setLocalPriority] = useState<PriorityType>(priority);
   const [localStatus, setLocalStatus] = useState<StatusType>(status);
 
+  // for draggable changing status
+  useEffect(() => {
+    setLocalStatus(status);
+  }, [status]);
+
   const openCloseModal = () => {
     setModalActive(!modalActive);
+    setDraggable(!isDraggable);
   };
   const switchToInputs = () => {
-    setIsInput(true);
+    setIsInput(!isInput);
+  };
+  const saveChanges = () => {
+    setIsInput(false);
+    setModalActive(false);
+    dispatch(
+      updateTaskData({
+        taskTitle: localTaskTitle,
+        description: localDescription,
+        timeSpent: localTimeSpent,
+        priority: localPriority,
+        status: localStatus,
+        taskId,
+        todolistId,
+      }),
+    );
+    setDraggable!(!isDraggable);
   };
   const changeTaskTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setLocalTaskTitle(e.currentTarget.value);
@@ -40,17 +72,11 @@ export const Task: React.FC<TaskPropsType> = props => {
   const changeTimeSpentHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setLocalTimeSpent(e.currentTarget.value);
   };
-  const changeDeadlineDateHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setLocalDeadlineDate(e.currentTarget.value);
-  };
   const changePriorityHandler = (e: ChangeEvent<HTMLSelectElement>) => {
     setLocalPriority(e.currentTarget.value as PriorityType);
   };
   const changeStatusHandler = (e: ChangeEvent<HTMLSelectElement>) => {
     setLocalStatus(e.currentTarget.value as StatusType);
-  };
-  const saveChanges = () => {
-    setIsInput(false);
   };
 
   let color = s.priorityLow;
@@ -87,7 +113,7 @@ export const Task: React.FC<TaskPropsType> = props => {
             </div>
           </div>
           <div className={s.item}>
-            Description:
+            <span className={s.itemLabel}>Description:</span>
             {isInput ? (
               <textarea
                 className={s.itemInput}
@@ -98,9 +124,12 @@ export const Task: React.FC<TaskPropsType> = props => {
               <span>{localDescription}</span>
             )}
           </div>
-          <div className={s.item}>Date created: {creationDate}</div>
           <div className={s.item}>
-            Time spent:
+            <span className={s.itemLabel}>Date created:</span>
+            {creationDate}
+          </div>
+          <div className={s.item}>
+            <span className={s.itemLabel}>Time spent:</span>
             {isInput ? (
               <input
                 className={s.itemInput}
@@ -108,24 +137,15 @@ export const Task: React.FC<TaskPropsType> = props => {
                 onChange={changeTimeSpentHandler}
               />
             ) : (
-              <span>{localTimeSpent}</span>
+              <span>{localTimeSpent} hours</span>
             )}
           </div>
           <div className={s.item}>
-            Deadline:
-            {isInput ? (
-              <input
-                className={s.itemInput}
-                type="date"
-                value={localDeadlineDate}
-                onChange={changeDeadlineDateHandler}
-              />
-            ) : (
-              <span>{localDeadlineDate}</span>
-            )}
+            <span className={s.itemLabel}>Deadline:</span>
+            {deadlineDate}
           </div>
           <div className={s.item}>
-            Priority:
+            <span className={s.itemLabel}>Priority:</span>
             {isInput ? (
               <select
                 className={s.itemInput}
@@ -141,7 +161,7 @@ export const Task: React.FC<TaskPropsType> = props => {
             )}
           </div>
           <div className={s.item}>
-            Status:
+            <span className={s.itemLabel}>Status:</span>
             {isInput ? (
               <select
                 className={s.itemInput}
@@ -173,15 +193,11 @@ export const Task: React.FC<TaskPropsType> = props => {
   );
 };
 
-export type TaskPropsType = {
-  taskId: string;
-  taskTitle: string;
-  description: string;
+export type TaskPropsType = UpdateTaskDataType & {
   creationDate: string;
-  timeSpent: string;
   deadlineDate: string;
-  priority: PriorityType;
-  status: StatusType;
+  setDraggable: (value: boolean) => void;
+  isDraggable: boolean;
 };
 
 export type StatusType = 'queue' | 'development' | 'done';

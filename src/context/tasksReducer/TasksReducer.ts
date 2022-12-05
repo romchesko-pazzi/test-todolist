@@ -1,4 +1,4 @@
-import { StatusType, TaskPropsType } from '../../components/task/Task';
+import { PriorityType, StatusType } from '../../components/task/Task';
 import {
   CreateTodolistType,
   SetTodolistsType,
@@ -41,6 +41,13 @@ export const TasksReducer = (
             : m,
         ),
       };
+    case 'tasks/update-task-data':
+      return {
+        ...state,
+        [action.payload.task.todolistId]: state[action.payload.task.todolistId].map(m =>
+          m.taskId === action.payload.task.taskId ? { ...m, ...action.payload.task } : m,
+        ),
+      };
     default: {
       return state;
     }
@@ -68,18 +75,27 @@ export const changeTaskStatus = (task: TaskType, newStatus: StatusType) => {
   } as const;
 };
 
+export const updateTaskData = (task: UpdateTaskDataType) => {
+  return {
+    type: 'tasks/update-task-data',
+    payload: { task },
+  } as const;
+};
+
 type CreateTaskType = ReturnType<typeof createTask>;
 type SetTasksType = ReturnType<typeof setTasks>;
 type ChangeTaskStatusType = ReturnType<typeof changeTaskStatus>;
+type UpdateTaskType = ReturnType<typeof updateTaskData>;
 
 export type TasksActionsType =
   | CreateTodolistType
   | SetTodolistsType
   | CreateTaskType
   | SetTasksType
-  | ChangeTaskStatusType;
+  | ChangeTaskStatusType
+  | UpdateTaskType;
 
-type TasksGeneralType = {
+export type TasksGeneralType = {
   [key: string]: TaskType[];
 };
 
@@ -89,6 +105,17 @@ export type BoardType = {
   tasks: TaskType[];
 };
 
-export type TaskType = TaskPropsType & {
+export type TaskType = UpdateTaskDataType & {
+  creationDate: string;
+  deadlineDate: string;
+};
+
+export type UpdateTaskDataType = {
+  taskId: string;
   todolistId: string;
+  taskTitle: string;
+  description: string;
+  timeSpent: string;
+  priority: PriorityType;
+  status: StatusType;
 };

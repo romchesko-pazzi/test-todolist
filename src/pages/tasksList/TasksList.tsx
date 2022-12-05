@@ -36,6 +36,7 @@ export const TasksList = () => {
   const [startBoard, setStartBoard] = useState<BoardType>(currentBoardInit);
   const [currentTask, setCurrentTask] = useState<TaskType>(currentTaskInit);
   const [modalActive, setModalActive] = useState(false);
+  const [isDraggable, setIsDraggable] = useState(true);
 
   useEffect(() => {
     const tasksFromLS = localStorage.getItem('tasks');
@@ -114,7 +115,7 @@ export const TasksList = () => {
             <h3>{board.filter}</h3>
             {board.tasks.map(item => (
               <div
-                draggable
+                draggable={isDraggable}
                 onDragOver={e => dragOverHandler(e)}
                 onDragStart={e => dragStartHandler(e, board, item)}
                 key={item.taskId}
@@ -123,6 +124,7 @@ export const TasksList = () => {
                 <Task
                   key={item.taskId}
                   taskId={item.taskId}
+                  todolistId={todolistId}
                   taskTitle={item.taskTitle}
                   description={item.description}
                   creationDate={item.creationDate}
@@ -130,6 +132,8 @@ export const TasksList = () => {
                   deadlineDate={item.deadlineDate}
                   priority={item.priority}
                   status={item.status}
+                  setDraggable={setIsDraggable}
+                  isDraggable={isDraggable}
                 />
               </div>
             ))}
