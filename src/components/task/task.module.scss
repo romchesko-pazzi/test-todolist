@@ -18,6 +18,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  & span {
+    display: block;
+  }
 }
 
 %priorityMain {

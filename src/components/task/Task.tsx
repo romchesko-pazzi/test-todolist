@@ -6,6 +6,12 @@ import {
   updateTaskData,
   UpdateTaskDataType,
 } from '../../context/tasksReducer/TasksReducer';
+import {
+  buttonFields,
+  Priorities,
+  Statuses,
+  taskFields,
+} from '../../data/constants/fields';
 import { BaseModal } from '../modals/baseModal/BaseModal';
 import { SvgSelector } from '../svgSelector/SvgSelector';
 
@@ -81,9 +87,9 @@ export const Task: React.FC<TaskPropsType> = props => {
 
   let color = s.priorityLow;
 
-  if (priority === 'medium') {
+  if (priority === Priorities.medium) {
     color = s.priorityMedium;
-  } else if (priority === 'high') {
+  } else if (priority === Priorities.high) {
     color = s.priorityHigh;
   }
 
@@ -95,8 +101,12 @@ export const Task: React.FC<TaskPropsType> = props => {
       </div>
       <div className={s.dateAndPriority}>
         <div>
-          <div>Date created: {creationDate}</div>
-          <div>Deadline: {deadlineDate}</div>
+          <span>
+            {taskFields.dateCreated}: {creationDate}
+          </span>
+          <span>
+            {taskFields.deadline}: {deadlineDate}
+          </span>
         </div>
         <div className={color}>{priority}</div>
       </div>
@@ -113,7 +123,7 @@ export const Task: React.FC<TaskPropsType> = props => {
             </div>
           </div>
           <div className={s.item}>
-            <span className={s.itemLabel}>Description:</span>
+            <span className={s.itemLabel}>{taskFields.description}: </span>
             {isInput ? (
               <textarea
                 className={s.itemInput}
@@ -125,11 +135,12 @@ export const Task: React.FC<TaskPropsType> = props => {
             )}
           </div>
           <div className={s.item}>
-            <span className={s.itemLabel}>Date created:</span>
-            {creationDate}
+            <span className={s.itemLabel}>
+              {taskFields.dateCreated}: {creationDate}
+            </span>
           </div>
           <div className={s.item}>
-            <span className={s.itemLabel}>Time spent:</span>
+            <span className={s.itemLabel}>{taskFields.timeSpent}: </span>
             {isInput ? (
               <input
                 className={s.itemInput}
@@ -137,15 +148,16 @@ export const Task: React.FC<TaskPropsType> = props => {
                 onChange={changeTimeSpentHandler}
               />
             ) : (
-              <span>{localTimeSpent} hours</span>
+              <span>{localTimeSpent}</span>
             )}
           </div>
           <div className={s.item}>
-            <span className={s.itemLabel}>Deadline:</span>
-            {deadlineDate}
+            <span className={s.itemLabel}>
+              {taskFields.deadline}: {deadlineDate}
+            </span>
           </div>
           <div className={s.item}>
-            <span className={s.itemLabel}>Priority:</span>
+            <span className={s.itemLabel}>{taskFields.priority}: </span>
             {isInput ? (
               <select
                 className={s.itemInput}
@@ -161,16 +173,16 @@ export const Task: React.FC<TaskPropsType> = props => {
             )}
           </div>
           <div className={s.item}>
-            <span className={s.itemLabel}>Status:</span>
+            <span className={s.itemLabel}>{taskFields.status}: </span>
             {isInput ? (
               <select
                 className={s.itemInput}
                 value={localStatus}
                 onChange={changeStatusHandler}
               >
-                <option value="queue">queue</option>
-                <option value="development">development</option>
-                <option value="done">done</option>
+                <option value={Statuses.queue}>{Statuses.queue}</option>
+                <option value={Statuses.development}>{Statuses.development}</option>
+                <option value={Statuses.done}>{Statuses.done}</option>
               </select>
             ) : (
               <span>{localStatus}</span>
@@ -182,10 +194,10 @@ export const Task: React.FC<TaskPropsType> = props => {
             <button type="button" onClick={switchToInputs}>
               <SvgSelector id="edit" />
             </button>
-            Make your changes
+            {buttonFields.editBtn}
           </div>
           <button type="button" onClick={saveChanges}>
-            Save changes
+            {buttonFields.saveBtn}
           </button>
         </div>
       </BaseModal>

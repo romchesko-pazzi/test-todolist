@@ -1,8 +1,14 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 
 import { useDispatch } from 'react-redux';
 
 import { createTask } from '../../../context/tasksReducer/TasksReducer';
+import {
+  buttonFields,
+  Priorities,
+  Statuses,
+  taskFields,
+} from '../../../data/constants/fields';
 import { guid } from '../../../utils/functions/generateRandomId/guid';
 import { getDate, getDeadlineDate } from '../../../utils/functions/getDate/getDate';
 import { PriorityType, StatusType } from '../../task/Task';
@@ -15,10 +21,22 @@ export const AddTaskModal: React.FC<PropsType> = props => {
 
   const [taskTitle, setTaskTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [timeSpent, setElapsedTime] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [priority, setPriority] = useState<PriorityType>('medium');
-  const [status, setStatus] = useState<StatusType>('queue');
+  const [timeSpent, setTimeSpent] = useState('');
+  const [deadline, setDeadline] = useState('');
+  const [priority, setPriority] = useState<PriorityType>(Priorities.low);
+  const [status, setStatus] = useState<StatusType>(Statuses.queue);
+  const reset = () => {
+    setTaskTitle('');
+    setTimeSpent('');
+    setDeadline('');
+    setDescription('');
+    setPriority(Priorities.low);
+    setStatus(Statuses.queue);
+  };
+
+  useEffect(() => {
+    if (!modalActive) reset();
+  }, [modalActive]);
 
   const dispatch = useDispatch();
   // handlers
@@ -29,10 +47,10 @@ export const AddTaskModal: React.FC<PropsType> = props => {
     setDescription(e.currentTarget.value);
   };
   const elapsedTimeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setElapsedTime(e.currentTarget.value);
+    setTimeSpent(e.currentTarget.value);
   };
   const endDateHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setEndDate(e.currentTarget.value);
+    setDeadline(e.currentTarget.value);
   };
   const setPriorityHandler = (e: ChangeEvent<HTMLSelectElement>) => {
     setPriority(e.currentTarget.value as PriorityType);
@@ -43,7 +61,7 @@ export const AddTaskModal: React.FC<PropsType> = props => {
 
   const createNewTaskHandler = () => {
     const creationDate = getDate();
-    const deadlineDate = getDeadlineDate(endDate);
+    const deadlineDate = getDeadlineDate(deadline);
 
     dispatch(
       createTask({
@@ -59,26 +77,26 @@ export const AddTaskModal: React.FC<PropsType> = props => {
       }),
     );
     switchModal(false);
-    setTaskTitle('');
+    reset();
   };
 
   const fields = [
     {
-      label: 'Enter task name:',
+      label: taskFields.taskName,
       type: 'text',
       value: taskTitle,
       callback: taskTitleHandler,
     },
     {
-      label: 'Time spent: (hours)',
+      label: taskFields.timeSpent,
       type: 'text',
       value: timeSpent,
       callback: elapsedTimeHandler,
     },
     {
-      label: 'End date:',
+      label: taskFields.deadline,
       type: 'date',
-      value: endDate,
+      value: deadline,
       callback: endDateHandler,
     },
   ];
@@ -93,11 +111,11 @@ export const AddTaskModal: React.FC<PropsType> = props => {
           </div>
         ))}
         <div className={s.description}>
-          Description:
+          {taskFields.description}
           <textarea value={description} onChange={descriptionHandler} />
         </div>
         <div>
-          Priority:
+          {taskFields.priority}
           <select value={priority} onChange={setPriorityHandler}>
             <option value="low">low</option>
             <option value="medium">medium</option>
@@ -105,7 +123,7 @@ export const AddTaskModal: React.FC<PropsType> = props => {
           </select>
         </div>
         <div>
-          Status:
+          {taskFields.status}
           <select value={status} onChange={setStatusHandler}>
             <option value="queue">queue</option>
             <option value="development">development</option>
@@ -113,12 +131,12 @@ export const AddTaskModal: React.FC<PropsType> = props => {
           </select>
         </div>
         <div>
-          Attach files:
+          {taskFields.attachFiles}
           <input type="file" />
         </div>
       </div>
       <button type="button" onClick={createNewTaskHandler}>
-        create
+        {buttonFields.createBtn}
       </button>
     </BaseModal>
   );

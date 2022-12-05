@@ -11,6 +11,7 @@ import {
   setTasks,
   TaskType,
 } from '../../context/tasksReducer/TasksReducer';
+import { buttonFields, Statuses } from '../../data/constants/fields';
 import { currentBoardInit, currentTaskInit } from '../../data/constants/testData';
 import { useAppSelector } from '../../utils/hooks/typedUseSelector';
 
@@ -51,21 +52,28 @@ export const TasksList = () => {
   useEffect(() => {
     if (tasks.length > 0) localStorage.setItem('tasks', JSON.stringify(tasks));
     setBoards([
-      { boardId: 1, filter: 'queue', tasks: queueTasks },
-      { boardId: 2, filter: 'development', tasks: devTasks },
-      { boardId: 3, filter: 'done', tasks: doneTasks },
+      { boardId: 1, filter: Statuses.queue, tasks: queueTasks },
+      { boardId: 2, filter: Statuses.development, tasks: devTasks },
+      { boardId: 3, filter: Statuses.done, tasks: doneTasks },
     ]);
   }, [tasks]);
 
   // handlers
-  const dragStartHandler = (e: any, sendingBoard: BoardType, item: TaskType) => {
+  const dragStartHandler = (
+    e: React.DragEvent<HTMLDivElement>,
+    sendingBoard: BoardType,
+    item: TaskType,
+  ) => {
     setStartBoard(sendingBoard);
     setCurrentTask(item);
   };
 
-  const dragOverHandler = (e: any) => e.preventDefault();
+  const dragOverHandler = (e: React.DragEvent<HTMLDivElement>) => e.preventDefault();
 
-  const dropToReceivingBoard = (e: any, receivingBoard: BoardType) => {
+  const dropToReceivingBoard = (
+    e: React.DragEvent<HTMLDivElement>,
+    receivingBoard: BoardType,
+  ) => {
     // пушим в принимающую доску
     receivingBoard.tasks.push(currentTask);
 
@@ -98,10 +106,10 @@ export const TasksList = () => {
     <div className={s.container}>
       <div className={s.headContent}>
         <Link className={s.returnToTodolists} to="/">
-          <span>Back to boards list</span>
+          <span>Back to todolists</span>
         </Link>
         <button type="button" onClick={openModal}>
-          add new task
+          {buttonFields.addNewTaskBtn}
         </button>
       </div>
       <div className={s.flexContainer}>

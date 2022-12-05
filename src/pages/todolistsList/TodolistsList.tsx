@@ -8,6 +8,7 @@ import {
   createTodolist,
   setTodolists,
 } from '../../context/todolistReducer.ts/TodolistReducer';
+import { buttonFields, todolistFields } from '../../data/constants/fields';
 import { guid } from '../../utils/functions/generateRandomId/guid';
 import { useAppSelector } from '../../utils/hooks/typedUseSelector';
 
@@ -48,17 +49,17 @@ export const TodolistsList = () => {
     <div className={s.container}>
       <div className={s.addTodolist}>
         <button onClick={openModal} type="button">
-          add new todolist
+          {buttonFields.addNewTodolistBtn}
         </button>
       </div>
       {todolists.map(m => (
         <Todolist key={m.todolistId} title={m.title} todolistId={m.todolistId} />
       ))}
       <BaseModal active={modalActive} setActive={setModalActive}>
-        Enter todolist name
+        <span style={{ marginRight: '1rem' }}>{todolistFields.todolistName}</span>
         <input type="text" value={titleValue} onChange={todolistTitleHandler} />
         <button type="button" onClick={createTodolistHandler}>
-          create
+          {buttonFields.createBtn}
         </button>
       </BaseModal>
     </div>
