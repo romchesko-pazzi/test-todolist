@@ -10,6 +10,7 @@
 
   & > div:not(:last-child) {
     margin-right: 1.5rem;
+    font-weight: 700;
   }
 }
 
@@ -44,7 +45,6 @@
 }
 
 .modalContent {
-
 }
 
 .item {
@@ -53,6 +53,10 @@
   background-color: #f5f5f5;
   display: flex;
   align-items: center;
+}
+
+.itemLabel {
+  margin-right: .7rem;
 }
 
 .itemInput {

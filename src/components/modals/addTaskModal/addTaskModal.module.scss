@@ -3,8 +3,13 @@
     margin-bottom: 1rem;
   }
 
-  & input, select {
+  & input, select,textarea {
     margin-left: 1.5rem;
   }
 
+}
+
+.description {
+  display: flex;
+  align-items: center;
 }

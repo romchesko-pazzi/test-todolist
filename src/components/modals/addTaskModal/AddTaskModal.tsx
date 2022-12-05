@@ -25,7 +25,7 @@ export const AddTaskModal: React.FC<PropsType> = props => {
   const taskTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
     setTaskTitle(e.currentTarget.value);
   };
-  const descriptionHandler = (e: ChangeEvent<HTMLInputElement>) => {
+  const descriptionHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setDescription(e.currentTarget.value);
   };
   const elapsedTimeHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -70,12 +70,6 @@ export const AddTaskModal: React.FC<PropsType> = props => {
       callback: taskTitleHandler,
     },
     {
-      label: 'Description:',
-      type: 'text',
-      value: description,
-      callback: descriptionHandler,
-    },
-    {
       label: 'Time spent: (hours)',
       type: 'text',
       value: timeSpent,
@@ -98,6 +92,10 @@ export const AddTaskModal: React.FC<PropsType> = props => {
             <input value={field.value} type={field.type} onChange={field.callback} />
           </div>
         ))}
+        <div className={s.description}>
+          Description:
+          <textarea value={description} onChange={descriptionHandler} />
+        </div>
         <div>
           Priority:
           <select value={priority} onChange={setPriorityHandler}>

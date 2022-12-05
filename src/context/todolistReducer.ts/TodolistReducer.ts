@@ -34,7 +34,7 @@ export type SetTodolistsType = ReturnType<typeof setTodolists>;
 
 export type TodolistsActionsType = CreateTodolistType | SetTodolistsType;
 
-type TodolistType = {
+export type TodolistType = {
   title: string;
   todolistId: string;
 };
